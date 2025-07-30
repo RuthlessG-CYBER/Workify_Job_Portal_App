@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun JobPortalUI(navController: NavController) {
+fun SplashScreenUI(navController: NavController) {
     val pages = listOf(
         OnboardingPage("Find your", "Dream Job", R.drawable.background),
         OnboardingPage("Get Hired", "In Top Companies", R.drawable.background_2),

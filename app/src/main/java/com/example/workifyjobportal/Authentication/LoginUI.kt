@@ -134,7 +134,7 @@ fun LoginScreen(navController: NavController){
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 TextButton(onClick = {
-                    if (email == "admin" && password == "123"){
+                    if (email == "admin@123" && password == "123"){
                         navController.navigate("home")
                     }
                 },
