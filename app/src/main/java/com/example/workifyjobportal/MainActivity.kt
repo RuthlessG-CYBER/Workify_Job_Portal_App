@@ -4,25 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Login
-import androidx.compose.material.icons.filled.EmojiPeople
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Login
-import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -30,11 +14,8 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -45,21 +26,26 @@ import com.example.workifyjobportal.Authentication.LoginScreen
 import com.example.workifyjobportal.Authentication.SignupScreen
 import com.example.workifyjobportal.Data.CustomSliderElement
 import com.example.workifyjobportal.Data.JobListing
+import com.example.workifyjobportal.Data.bottomNavItems
 import com.example.workifyjobportal.Data.demoSliderData
 import com.example.workifyjobportal.Data.jobList
-import com.example.workifyjobportal.ui.theme.WorkifyJobPortalTheme
+import com.example.workifyjobportal.screens.JobUI
+import com.example.workifyjobportal.screens.SplashScreenUI
+import com.example.workifyjobportal.screens.jobApplied
+
+import com.example.workifyjobportal.screens.myProfile
+import com.example.workifyjobportal.screens.searchPannel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            WorkifyJobPortalTheme {
-                Navigation()
-            }
+            Navigation()
         }
     }
 }
+
 
 @Composable
 fun Navigation(
@@ -90,9 +76,11 @@ fun Navigation(
             composable("welcome") { SplashScreenUI(navController) }
             composable("login") { LoginScreen(navController) }
             composable("signup") { SignupScreen(navController) }
-            composable("home") {
-                JobUI(data = data, jobs = jobs)
-            }
+            // protected routes
+            composable("home") { JobUI(navController, data = data, jobs = jobs) }
+            composable("search") { searchPannel(navController) }
+            composable("applied") { jobApplied(navController) }
+            composable("profile") { myProfile(navController) }
         }
     }
 }
@@ -137,16 +125,3 @@ fun BottomNavigationBar(
     }
 }
 
-
-val bottomNavItems = listOf(
-    BottomNavItem("Welcome", Icons.Default.EmojiPeople, "welcome"),
-    BottomNavItem("Login", Icons.Default.Login, "login"),
-    BottomNavItem("Signup", Icons.Default.PersonAdd, "signup"),
-    BottomNavItem("Home", Icons.Default.Home, "home")
-)
-
-data class BottomNavItem(
-    val label: String,
-    val icon: ImageVector,
-    val route: String
-)

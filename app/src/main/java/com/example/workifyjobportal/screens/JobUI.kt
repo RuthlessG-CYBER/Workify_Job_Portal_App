@@ -1,76 +1,74 @@
-package com.example.workifyjobportal
+package com.example.workifyjobportal.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.workifyjobportal.Data.CustomSliderElement
 import com.example.workifyjobportal.Data.JobListing
+import com.example.workifyjobportal.R
+import com.example.workifyjobportal.screens.CustomSlider
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.delay
 
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun JobUI(data: List<CustomSliderElement>, jobs: List<JobListing>){
+fun JobUI(navController: NavController, data: List<CustomSliderElement>, jobs: List<JobListing>){
     Box(modifier = Modifier.fillMaxSize())
     {
-        Column(modifier = Modifier.fillMaxSize().padding(top = 10.dp))
+        Column(modifier = Modifier.padding(top = 10.dp))
         {
             //Top App Bar
-            Card(modifier = Modifier.height(70.dp),
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(70.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = Color.Transparent
-                ))
-            {
+                )
+            ) {
                 Row(
-                    modifier = Modifier.fillMaxSize().padding(start = 20.dp, end = 20.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 20.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -78,14 +76,18 @@ fun JobUI(data: List<CustomSliderElement>, jobs: List<JobListing>){
                         contentDescription = "Location",
                         modifier = Modifier.size(30.dp)
                     )
+
                     Spacer(modifier = Modifier.width(10.dp))
+
                     Column {
                         Text(
                             text = "Choose Location",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Medium
                         )
-                        Row {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Text(
                                 text = "Bengaluru, ",
                                 fontSize = 15.sp,
@@ -101,7 +103,7 @@ fun JobUI(data: List<CustomSliderElement>, jobs: List<JobListing>){
                             Icon(
                                 Icons.Default.KeyboardArrowDown,
                                 contentDescription = "Down Arrow",
-                                modifier = Modifier.size(30.dp)
+                                modifier = Modifier.size(20.dp)
                             )
                         }
                     }
@@ -109,13 +111,11 @@ fun JobUI(data: List<CustomSliderElement>, jobs: List<JobListing>){
                     Spacer(modifier = Modifier.weight(1f))
 
                     ElevatedCard(
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 5.dp
-                        ),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color.White
-                        )
-                    ){
+                        onClick = { navController.navigate("profile") },
+                        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        shape = RoundedCornerShape(8.dp) // optional for better look
+                    ) {
                         Icon(
                             painter = painterResource(R.drawable.logo_1),
                             contentDescription = "Person",
@@ -124,6 +124,7 @@ fun JobUI(data: List<CustomSliderElement>, jobs: List<JobListing>){
                     }
                 }
             }
+
 
             Spacer(modifier = Modifier.height(5.dp))
 
@@ -147,10 +148,9 @@ fun JobUI(data: List<CustomSliderElement>, jobs: List<JobListing>){
                     .fillMaxWidth()
                     .height(200.dp)
             ) { page ->
-                CustomSlider(data[page])
+                CustomSlider(item = data[page])
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
 
             // Search Bar and Menu Bar
             Row(
@@ -159,22 +159,24 @@ fun JobUI(data: List<CustomSliderElement>, jobs: List<JobListing>){
                     .padding(start = 30.dp, end = 30.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                var searchText by remember { mutableStateOf("") }
 
-                OutlinedTextField(
-                    value = searchText,
-                    onValueChange = { searchText = it },
-                    placeholder = { Text(text = "Search for jobs") },
-                    shape = RoundedCornerShape(20.dp),
-                    modifier = Modifier.weight(1f)
-                )
+                OutlinedCard(
+                    onClick = { navController.navigate("search")},
+                    modifier = Modifier.height(55.dp).weight(1f)){
+                    Box(modifier = Modifier.fillMaxSize()){
+                        Text(
+                            text = "Search your jobs",
+                            modifier = Modifier.align(Alignment.CenterStart).padding(start = 20.dp)
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.width(10.dp))
 
                 Card(
-                    modifier = Modifier.size(45.dp),
+                    modifier = Modifier.size(50.dp),
                     shape = RoundedCornerShape(10.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -189,7 +191,7 @@ fun JobUI(data: List<CustomSliderElement>, jobs: List<JobListing>){
                 }
             }
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             // Recommended Jobs
             Row {
@@ -210,9 +212,9 @@ fun JobUI(data: List<CustomSliderElement>, jobs: List<JobListing>){
                 )
             }
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(5.dp))
 
-            val randomJobs = remember { jobs.shuffled().take(3) }
+            val randomJobs = remember { jobs.shuffled().take(4) }
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize()

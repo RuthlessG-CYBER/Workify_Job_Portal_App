@@ -2,14 +2,19 @@ package com.example.workifyjobportal.Data
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Chat
+import androidx.compose.material.icons.filled.Approval
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.EmojiPeople
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PersonAdd
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.PersonOutline
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.workifyjobportal.R
 
 // Slide Bar Data
@@ -103,3 +108,16 @@ val jobList = listOf(
     ),
 )
 
+
+val bottomNavItems = listOf(
+    BottomNavItem("Home", Icons.Default.Home, "home"),
+    BottomNavItem("Profile", Icons.Default.Person, "profile"),
+    BottomNavItem("jobApplied", Icons.Default.Approval, "applied"),
+    BottomNavItem("Search", Icons.Default.Search, "search"),
+    )
+
+data class BottomNavItem(
+    val label: String,
+    val icon: ImageVector,
+    val route: String
+)
