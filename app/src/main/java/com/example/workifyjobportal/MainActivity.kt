@@ -95,7 +95,7 @@ fun BottomNavigationBar(
 
     NavigationBar(
         modifier = Modifier
-            .height(70.dp)  // ✅ Fixed height
+            .height(70.dp)
             .fillMaxWidth(),
         containerColor = Color.White,
         tonalElevation = 8.dp
